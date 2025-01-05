@@ -1,39 +1,37 @@
-export interface Lead {
-  id: string;
-  name: string;
-  company: string;
-  email: string;
-  position: string;
-  status: 'new' | 'qualified' | 'contacted' | 'responded';
-  score: number;
-  lastContact?: Date;
-  notes?: string;
+// Existing types remain...
+
+export interface BatchOperationResult {
+  successful: number;
+  failed: number;
+  total: number;
 }
 
-export interface Campaign {
-  id: string;
+export interface TokenUsage {
+  used: number;
+  remaining: number;
+}
+
+export interface CampaignConfig {
   name: string;
-  status: 'draft' | 'active' | 'paused' | 'completed';
-  leads: Lead[];
-  template: string;
-  followUps: string[];
-  stats: {
-    sent: number;
-    opened: number;
-    replied: number;
+  template: EmailTemplate;
+  followUps?: {
+    days: number;
+    subject: string;
+    body: string;
+  }[];
+  schedule?: {
+    startDate: string;
+    endDate?: string;
+    timezone: string;
+    sendingHours?: {
+      start: number;
+      end: number;
+    };
   };
 }
 
-export interface Conversation {
-  id: string;
-  leadId: string;
-  campaignId: string;
-  messages: {
-    id: string;
-    content: string;
-    timestamp: Date;
-    sender: 'agent' | 'lead';
-  }[];
-  status: 'active' | 'closed';
-  lastActivity: Date;
+export interface AgentResponse<T> {
+  data?: T;
+  error?: string;
+  tokenUsage: TokenUsage;
 }
